@@ -1,5 +1,6 @@
-#Pycharm ignore
-.idea/
+# file: ~/.gitignore_global
+.DS_Store
+.idea
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
