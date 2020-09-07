@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 from numpy import random
 
 from yolov5processor.models.experimental import attempt_load
@@ -39,6 +40,8 @@ class ExecuteInference:
 
     def predict(self, image):
         img = letterbox(image, new_shape=self.img_size)[0]
+        img = img[:, :, ::-1].transpose(2, 0, 1)
+        img = np.ascontiguousarray(img)
         img = torch.from_numpy(img).to(self.device)
         img = img.half() if self.half else img.float()
         img /= 255.0
