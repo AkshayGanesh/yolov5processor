@@ -51,6 +51,7 @@ class ExecuteInference:
         pred = non_max_suppression(pred, self.confidence, self.iou, classes=None, agnostic=self.agnostic_nms)
         _output = list()
         for i, det in enumerate(pred):
-            det[:, :4] = scale_coords(img.shape[2:], det[:, :4], img.shape).round()
-            _output.append(det)
+            if det is not None and len(det):
+                det[:, :4] = scale_coords(img.shape[2:], det[:, :4], img.shape).round()
+                _output.append(det)
         return _output
