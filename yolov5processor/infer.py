@@ -23,7 +23,7 @@ class ExecuteInference:
     def inference_device(self):
         device = select_device('cpu')
         if self.gpu:
-            device = select_device('0')
+            device = select_device(torch.cuda.current_device())
         half = device.type != 'cpu'
         return device, half
 
