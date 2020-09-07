@@ -16,12 +16,7 @@ class ExecuteInference:
         self.agnostic_nms = agnostic_nms
         self.img_size = img_size
         self.device, self.half = self.inference_device()
-        self.names = None
-        self.colors = None
-        self.model = None
-        self.half = None
-        self.inference_device()
-        self.load_model()
+        self.model, self.names, self.colors = self.load_model()
 
     def inference_device(self):
         device = select_device('cpu')
@@ -31,14 +26,15 @@ class ExecuteInference:
         return device, half
 
     def load_model(self):
-        self.model = attempt_load(self.weight, map_location=self.device)
-        self.imgsz = check_img_size(self.img_size, s=self.model.stride.max())
+        model = attempt_load(self.weight, map_location=self.device)
+        imgsz = check_img_size(self.img_size, s=model.stride.max())
         if self.half:
-            self.model.half()
-        self.names = self.model.module.names if hasattr(self.model, 'module') else self.model.names
-        self.colors = [[random.randint(0, 255) for _ in range(3)] for _ in range(len(self.names))]
-        img = torch.zeros((1, 3, self.imgsz, self.imgsz), device=self.device)
-        _ = self.model(img.half() if self.half else img) if self.device.type != 'cpu' else None
+            model.half()
+        names = model.module.names if hasattr(model, 'module') else model.names
+        colors = [[random.randint(0, 255) for _ in range(3)] for _ in range(len(self.names))]
+        img = torch.zeros((1, 3, imgsz, imgsz), device=self.device)
+        _ = model(img.half() if self.half else img) if self.device.type != 'cpu' else None
+        return model, names, colors
 
     def predict(self, image):
         img = letterbox(image, new_shape=self.img_size)[0]
