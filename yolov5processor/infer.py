@@ -54,5 +54,6 @@ class ExecuteInference:
         for i, det in enumerate(pred):
             if det is not None and len(det):
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], img.shape).round()
-                _output.append(det)
+                for *xyxy, conf, cls in reversed(det):
+                    _output.append({"coordinates": xyxy, "confidence": conf, "class": cls})
         return _output
