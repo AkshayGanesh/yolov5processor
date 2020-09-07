@@ -20,6 +20,8 @@ class ExecuteInference:
         self.colors = None
         self.model = None
         self.half = None
+        self.inference_device()
+        self.load_model()
 
     def inference_device(self):
         device = select_device('cpu')
