@@ -32,7 +32,7 @@ class ExecuteInference:
         if self.half:
             model.half()
         names = model.module.names if hasattr(model, 'module') else model.names
-        colors = [[random.randint(0, 255) for _ in range(3)] for _ in range(len(self.names))]
+        colors = [[random.randint(0, 255) for _ in range(3)] for _ in range(len(names))]
         img = torch.zeros((1, 3, imgsz, imgsz), device=self.device)
         _ = model(img.half() if self.half else img) if self.device.type != 'cpu' else None
         return model, names, colors
