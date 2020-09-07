@@ -18,12 +18,12 @@ class ExecuteInference:
         self.img_size = img_size
         self.device, self.half = self.inference_device()
         self.model, self.names, self.colors = self.load_model()
-        print("Loaded Models")
+        print("Loaded Models...")
 
     def inference_device(self):
         device = select_device('cpu')
         if self.gpu:
-            device = select_device(torch.cuda.current_device())
+            device = select_device(str(torch.cuda.current_device()))
         half = device.type != 'cpu'
         return device, half
 
