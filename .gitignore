@@ -1,5 +1,6 @@
 # file: ~/.gitignore_global
 .DS_Store
+.idea/
 .idea
 
 # Byte-compiled / optimized / DLL files
