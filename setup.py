@@ -21,15 +21,12 @@ setuptools.setup(
     python_requires='>=3.6',
     install_requires =[
         "Cython",
-        "matplotlib>=3.2.2",
-        "numpy>=1.18.5",
-        "opencv-python>=4.1.2",
+        "matplotlib",
+        "numpy",
         "pillow",
-        "PyYAML>=5.3",
+        "PyYAML",
         "scipy>=1.4.1",
-        "tensorboard>=2.2",
-        "torch>=1.6.0",
-        "torchvision>=0.7.0",
-        "tqdm>=4.41.0"
+        "tensorboard",
+        "tqdm"
     ]
 )
