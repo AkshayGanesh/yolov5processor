@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="yolov5processor",
-    version="0.0.1",
+    version="0.0.2.1",
     author="Akshay G",
     author_email="akshayganes@gmail.com",
     description="Wrapper package for yolov5 inference:v3.0",
