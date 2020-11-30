@@ -5,13 +5,13 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="yolov5processor",
-    version="0.0.2.1",
+    version="1.0",
     author="Akshay G",
     author_email="akshayganes@gmail.com",
     description="Wrapper package for yolov5 inference:v3.0",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/AkshayGanesh/yolov5processor/tree/v0.0.1",
+    url="https://github.com/AkshayGanesh/yolov5processor/tree/v1.0",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -27,6 +27,8 @@ setuptools.setup(
         "PyYAML",
         "scipy>=1.4.1",
         "tensorboard",
-        "tqdm"
+        "tqdm",
+        "torch==1.6.0",
+        "torchvision==0.7.0"
     ]
 )

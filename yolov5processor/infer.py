@@ -1,4 +1,6 @@
+import os
 import torch
+import logging
 import numpy as np
 from numpy import random
 
@@ -6,6 +8,10 @@ from yolov5processor.models.experimental import attempt_load
 from yolov5processor.utils.datasets import letterbox
 from yolov5processor.utils.general import (check_img_size, non_max_suppression, scale_coords)
 from yolov5processor.utils.torch_utils import select_device
+
+logging.basicConfig( format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger("yolov5processor")
+logger.setLevel(os.environ.get('LOG_LEVEL', 'DEBUG').strip().upper())
 
 
 class ExecuteInference:
@@ -17,13 +23,16 @@ class ExecuteInference:
         self.agnostic_nms = agnostic_nms
         self.img_size = img_size
         self.device, self.half = self.inference_device()
-        self.model, self.names, self.colors = self.load_model()
-        print("Loaded Models...")
+        self.classes, self.model, self.names, self.colors = self.load_model()
+        logger.info("Loaded Models...")
 
     def inference_device(self):
-        device = select_device('cpu')
         if self.gpu:
             device = select_device(str(torch.cuda.current_device()))
+            logger.info("Using GPU Resource(s): {}".format(str(torch.cuda.current_device())))
+        else:
+            device = select_device('cpu')
+            logger.info("Using CPU Resources")
         half = device.type != 'cpu'
         return device, half
 
@@ -33,11 +42,12 @@ class ExecuteInference:
         if self.half:
             model.half()
         names = model.module.names if hasattr(model, 'module') else model.names
-        print("classes: {}".format(names))
+        logger.debug("Yolo v5 Model Classes: {}".format(names))
         colors = [[random.randint(0, 255) for _ in range(3)] for _ in range(len(names))]
         img = torch.zeros((1, 3, imgsz, imgsz), device=self.device)
         _ = model(img.half() if self.half else img) if self.device.type != 'cpu' else None
-        return model, names, colors
+        class_map = {index: label for index, label in zip(range(len(names)), names)}
+        return class_map, model, names, colors
 
     def predict(self, image):
         img = letterbox(image, new_shape=self.img_size)[0]
@@ -55,5 +65,7 @@ class ExecuteInference:
             if det is not None and len(det):
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], image.shape).round()
                 for *xyxy, conf, cls in reversed(det):
-                    _output.append({"points": xyxy, "conf": conf, "class": cls})
+                    _output.append({"points": [int(each) for each in xyxy],
+                                    "conf": int(conf),
+                                    "class": self.classes[int(cls)]})
         return _output
