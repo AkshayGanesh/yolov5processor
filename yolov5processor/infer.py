@@ -1,6 +1,4 @@
-import os
 import torch
-import logging
 import numpy as np
 from numpy import random
 
@@ -8,10 +6,6 @@ from yolov5processor.models.experimental import attempt_load
 from yolov5processor.utils.datasets import letterbox
 from yolov5processor.utils.general import (check_img_size, non_max_suppression, scale_coords)
 from yolov5processor.utils.torch_utils import select_device
-
-logging.basicConfig( format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger("yolov5processor")
-logger.setLevel(os.environ.get('LOG_LEVEL', 'DEBUG').strip().upper())
 
 
 class ExecuteInference:
@@ -24,15 +18,15 @@ class ExecuteInference:
         self.img_size = img_size
         self.device, self.half = self.inference_device()
         self.classes, self.model, self.names, self.colors = self.load_model()
-        logger.info("Loaded Models...")
+        print("Loaded Models...")
 
     def inference_device(self):
         if self.gpu:
             device = select_device(str(torch.cuda.current_device()))
-            logger.info("Using GPU Resource(s): {}".format(str(torch.cuda.current_device())))
+            print("Using GPU Resource(s): {}".format(str(torch.cuda.current_device())))
         else:
             device = select_device('cpu')
-            logger.info("Using CPU Resources")
+            print("Using CPU Resources")
         half = device.type != 'cpu'
         return device, half
 
@@ -42,7 +36,7 @@ class ExecuteInference:
         if self.half:
             model.half()
         names = model.module.names if hasattr(model, 'module') else model.names
-        logger.debug("Yolo v5 Model Classes: {}".format(names))
+        print("Yolo v5 Model Classes: {}".format(names))
         colors = [[random.randint(0, 255) for _ in range(3)] for _ in range(len(names))]
         img = torch.zeros((1, 3, imgsz, imgsz), device=self.device)
         _ = model(img.half() if self.half else img) if self.device.type != 'cpu' else None
