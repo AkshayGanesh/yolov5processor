@@ -60,6 +60,6 @@ class ExecuteInference:
                 det[:, :4] = scale_coords(img.shape[2:], det[:, :4], image.shape).round()
                 for *xyxy, conf, cls in reversed(det):
                     _output.append({"points": [int(each) for each in xyxy],
-                                    "conf": int(conf),
+                                    "conf": round(float(conf), 4),
                                     "class": self.classes[int(cls)]})
         return _output

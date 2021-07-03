@@ -25,6 +25,9 @@ print(pred)
   "class": "apple"
 }
 ```
-points key represnts the bounding box coordinates in the order x1, y1, x2, y2 respectively.
+points key represents the bounding box coordinates in the order x1, y1, x2, y2 respectively.
 conf key represents the confidence.
 class key represents the object class.
+
+Update:
+*  Added compatibility with torch 1.9 and torchvision 0.10

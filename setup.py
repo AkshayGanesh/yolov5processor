@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="yolov5processor",
-    version="1.0",
+    version="1.1",
     author="Akshay G",
     author_email="akshayganes@gmail.com",
     description="Wrapper package for yolov5 inference:v3.0",
@@ -28,7 +28,7 @@ setuptools.setup(
         "scipy>=1.4.1",
         "tensorboard",
         "tqdm",
-        "torch==1.6.0",
-        "torchvision==0.7.0"
+        "torch==1.9.0",
+        "torchvision==0.10.0"
     ]
 )
